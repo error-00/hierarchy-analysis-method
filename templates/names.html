@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<h4 class="display-4" align="center">Метод аналізу ієрархій</h4>
+<br><br>
+<div style="width: 70%; margin-left: auto; margin-right: auto;">
+    <form action="{{ url_for('matrix_krit') }}" method="POST">
+        <h5>Введіть імена критеріїв:</h5>
+        {% for i in range(num_criteria | int) %}
+        <input class="form-control" type="text" name="name_criteria" id="criter{{ i+1 }}"
+               placeholder="Критерій {{ i+1 }}" required>
+        <br>
+        {% endfor %}
+        <br>
+        <h5>Введіть імена альтернатив:</h5>
+        {% for n in range(num_alternatives) %}
+        <input class="form-control" type="text" name="name_alternatives" id="alternative{{ n+1 }}"
+               placeholder="Альтернатива {{ n+1 }}" required>
+        <br>
+        {% endfor %}
+        <br>
+
+        <button type="submit" class="btn btn-primary">Далі</button>
+        <br><br>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<h4 class="display-4" align="center">Метод аналізу ієрархій</h4>
+<br>
+<div style="width: 75%; margin-left: auto; margin-right: auto;">
+    <form action="{{ url_for('matrix_alt') }}" method="POST">
+        <h5>Матриця парних порівнянь для критеріїв</h5>
+        <div class="alert alert-primary" role="alert">1 - однакова важливість
+            <br>3 - помірна перевага одного над іншим
+            <br>5 - істотна перевага одного над іншим
+            <br>7 - значна перевага одного над іншим
+            <br>9 - дуже сильна перевага одного над іншим
+            <br>2, 4, 6, 8 - відповідні проміжні значення
+        </div>
+
+        <br>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered align-middle">
+
+                <thead class="table-secondary">
+                <tr>
+                    <th></th>
+                    {% for crit_n in name_criteria %}
+                    <th>{{ crit_n }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for i in range(name_criteria | length) %}
+                <tr>
+                    <th>{{ name_criteria[i] }}</th>
+                    {% for j in range(name_criteria | length) %}
+                    <td>
+                        {% if i < j %}
+                        {% if error %}
+                        <input class="form-control" type="text" name="matrix_krit"
+                               id="matrix_krit_up_{{ i }}_{{ j }}" value="{{ matrix_krit[i][j] }}"
+                               required pattern="^[1-9]$|^(1\/[2-9])$">
+                        {% else %}
+                        <input class="form-control" type="text" name="matrix_krit"
+                               id="matrix_krit_up_{{ i }}_{{ j }}_" required pattern="^[1-9]$|^(1\/[2-9])$">
+                        {% endif %}
+                        {% elif i > j %}
+                        <input class="form-control" type="text" name="matrix_krit"
+                               id="matrix_krit_up_{{ j }}_{{ i }}" value="" readonly>
+                        {% elif i == j %}
+                        <input class="form-control" type="text" name="matrix_krit"
+                               id="matrix_krit_up_[{{ i }}_{{ j }}]" value="1" readonly>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn-primary">Далі</button>
+        <br><br>
+
+    </form>
+</div>
+
+{% endblock %}

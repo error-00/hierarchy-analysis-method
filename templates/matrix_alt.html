@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<h4 class="display-4" align="center">Метод аналізу ієрархій</h4>
+<br><br>
+<div style="width: 70%; margin-left: auto; margin-right: auto;">
+    <form action="{{ url_for('result') }}" method="POST">
+        <h5>Матриця парних порівнянь для альтернатив</h5>
+        <div class="alert alert-primary" role="alert">1 - однакова важливість
+            <br>3 - помірна перевага одного над іншим
+            <br>5 - істотна перевага одного над іншим
+            <br>7 - значна перевага одного над іншим
+            <br>9 - дуже сильна перевага одного над іншим
+            <br>2, 4, 6, 8 - відповідні проміжні значення
+        </div>
+
+        {% for num in range(num_criteria) %}
+        <p class="fst-italic">Критерій "{{name_criteria[num]}}"</p>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered align-middle">
+
+                <thead class="table-secondary">
+                <tr>
+                    <th></th>
+                    {% for name in name_alternatives %}
+                    <th>{{ name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for i in range(name_alternatives | length) %}
+                <tr>
+                    <th>{{ name_alternatives[i] }}</th>
+                    {% for j in range(name_alternatives | length) %}
+                    <td>
+                        {% if i < j %}
+                        {% if error %}
+                        <input class="form-control" type="text" name="matrix_alt"
+                               id="matrix_alt{ i }}_{{ j }}" value="{{ matrix_alt[num][i][j] }}"
+                               required pattern="^[1-9]$|^(1\/[2-9])$">
+                        {% else %}
+                        <input class="form-control" type="text" name="matrix_alt"
+                               id="matrix_alt_{{ i }}_{{ j }}_" required pattern="^[1-9]$|^(1\/[2-9])$">
+                        {% endif %}
+                        {% elif i > j %}
+                        <input class="form-control" type="text" name="matrix_alt"
+                               id="matrix_alt{{ j }}_{{ i }}" value="" readonly>
+                        {% elif i == j %}
+                        <input class="form-control" type="text" name="matrix_alt"
+                               id="matrix_alt{{ i }}_{{ j }}" value="1" readonly>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Далі</button>
+        <br><br>
+
+    </form>
+</div>
+
+{% endblock %}
