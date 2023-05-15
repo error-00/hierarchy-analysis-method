@@ -44,14 +44,14 @@ def do_comp_vector(krit=0, criteria=0, matr=0, num_alt=0):
             dob = 1
             for num in matr[c]:
                 dob *= eval(num)
-            comp_vector.append(round(dob ** (1 / criteria), 3))  # За формулою
+            comp_vector.append(dob ** (1 / criteria))  # За формулою
     else:
         for count in range(criteria):
             for c in range(num_alt):
                 dob = 1
                 for num in matr[count][c]:
                     dob *= eval(num)
-                comp_vector[count].append(round(dob ** (1 / num_alt), 3))
+                comp_vector[count].append(dob ** (1 / num_alt))
     return comp_vector
 
 
@@ -59,10 +59,10 @@ def do_comp_vector(krit=0, criteria=0, matr=0, num_alt=0):
 def do_norm_vector(krit=0, comp_vector=0, criteria=0, num_alt=0):
     norm_vector = [] if krit else [[] for _ in range(criteria)]
     if krit:
-        norm_vector = [round(comp_vector[c] / sum(comp_vector), 3) for c in range(criteria)]
+        norm_vector = [comp_vector[c] / sum(comp_vector) for c in range(criteria)]
     else:
         for i in range(criteria):
-            norm_vector[i] = [round(comp_vector[i][c] / sum(comp_vector[i]), 3) for c in range(num_alt)]
+            norm_vector[i] = [comp_vector[i][c] / sum(comp_vector[i]) for c in range(num_alt)]
 
     return norm_vector
 
@@ -75,10 +75,10 @@ def do_sum_col(krit=0, matr=0, criteria=0, num_alt=0):
             s = 0
             for j in range(criteria):
                 s += eval(matr[j][i])
-            sum_col.append(round(s, 3))
+            sum_col.append(s)
     else:
         for c in range(criteria):
-            sum_col[c] = [round(sum([eval(matr[c][j][i]) for j in range(num_alt)]), 3) for i in range(num_alt)]
+            sum_col[c] = [sum([eval(matr[c][j][i]) for j in range(num_alt)]) for i in range(num_alt)]
 
     return sum_col
 
@@ -87,10 +87,10 @@ def do_sum_col(krit=0, matr=0, criteria=0, num_alt=0):
 def do_prod_col(krit=0, criteria=0, sum_col=0, norm_vector=0, num_alt=0):
     prod_col = [] if krit else [[] for _ in range(criteria)]
     if krit:
-        prod_col = [round(sum_col[i] * norm_vector[i], 3) for i in range(criteria)]
+        prod_col = [sum_col[i] * norm_vector[i] for i in range(criteria)]
     else:
         for c in range(criteria):
-            prod_col[c] = [round(sum_col[c][i] * norm_vector[c][i], 3) for i in range(num_alt)]
+            prod_col[c] = [sum_col[c][i] * norm_vector[c][i] for i in range(num_alt)]
 
     return prod_col
 
@@ -99,10 +99,10 @@ def do_prod_col(krit=0, criteria=0, sum_col=0, norm_vector=0, num_alt=0):
 def do_l_max(krit=0, prod_col=0, criteria=0):
     l_max = [] if krit else [[] for _ in range(criteria)]
     if krit:
-        l_max = [round(sum(prod_col), 3)]
+        l_max = [sum(prod_col)]
     else:
         for c in range(criteria):
-            l_max[c].append(round(sum(prod_col[c]), 3))
+            l_max[c].append(sum(prod_col[c]))
 
     return l_max
 
@@ -126,15 +126,15 @@ def do_consistency(krit=0, l_max=0, criteria=0, num_alt=0):
     relation_consistency = [] if krit else [[] for _ in range(criteria)]
 
     if krit:
-        index_consistency.append(abs(round((l_max[0] - criteria) / (criteria - 1), 2)))
-        relation_consistency.append(abs(round(
-            (index_consistency[0] / (random_consistency[str(criteria)])) * 100, 2)))
+        index_consistency.append((l_max[0] - criteria) / (criteria - 1))
+        relation_consistency.append(
+            (index_consistency[0] / (random_consistency[str(criteria)])) * 100)
 
     else:
         for c in range(criteria):
-            index_consistency[c].append(abs(round((l_max[c][0] - num_alt) / (num_alt - 1), 2)))
-            relation_consistency[c].append(abs(round(
-                (index_consistency[c][0] / (random_consistency[str(num_alt)])) * 100, 2)))
+            index_consistency[c].append((l_max[c][0] - num_alt) / (num_alt - 1))
+            relation_consistency[c].append(
+                (index_consistency[c][0] / (random_consistency[str(num_alt)])) * 100)
 
     return index_consistency, relation_consistency
 
@@ -174,7 +174,6 @@ def do_lst_norm_vector(krit=0, name=0, criteria=0, norm_vector=0, num_alt=0, g=0
             lst_norm_vector[c][c] = sorted(lst_norm_vector[c][c].items(),
                                            key=operator.itemgetter(1), reverse=True)
             lst_norm_vector[c][c] = {k: v for k, v in lst_norm_vector[c][c]}
-    print(lst_norm_vector)
     return lst_norm_vector
 
 
@@ -236,6 +235,6 @@ def do_global_prior(norm_vector=0, norm_vector_alt=0, num_alt=0):
     global_prior = []
     for i in range(num_alt):
         g_pr = sum(norm_vector[j] * norm_vector_alt[j][i] for j in range(len(norm_vector_alt)))
-        global_prior.append(round(g_pr, 4))
+        global_prior.append(g_pr)
 
     return global_prior

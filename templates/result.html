@@ -9,7 +9,12 @@
 <h4 class="display-4" align="center">Результат методу аналізу ієрархій</h4>
 <br><br>
 <div style="width: 80%; margin-left: auto; margin-right: auto;">
-    {% if error %}
+    {% if error_krit %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_krit }}
+    </div>
+    <br>
+    {% elif error %}
     <div class="alert alert-danger" role="alert">
         {{ error }}
     </div>
@@ -39,8 +44,8 @@
                     {% for j in range(num_criteria) %}
                     <td>{{ matrix_krit[i][j] }}</td>
                     {% endfor %}
-                    <td>{{ components_eigenvector[i] }}</td>
-                    <td>{{ normalized_eigenvector[i] }}</td>
+                    <td>{{ components_eigenvector[i] | round(3) }}</td>
+                    <td>{{ normalized_eigenvector[i] | round(3) }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -63,7 +68,7 @@
                 <tr>
                     <th class="table-secondary" style="width: 30%">Сума по стовпцях</th>
                     {% for i in range(num_criteria) %}
-                    <td style="width: 15%">{{ sum_col[i] }}</td>
+                    <td style="width: 15%">{{ sum_col[i] | round(3) }}</td>
                     {% endfor %}
                     <th class="table-secondary">Разом (Lmax)</th>
                 </tr>
@@ -71,9 +76,9 @@
                     <th class="table-secondary">Добуток додатку по стовпцях і нормалізованої оцінки вектора пріоритету
                     </th>
                     {% for i in range(num_criteria) %}
-                    <td>{{ prod_col[i] }}</td>
+                    <td>{{ prod_col[i] | round(3) }}</td>
                     {% endfor %}
-                    <td>{{ l_max[0] }}</td>
+                    <td>{{ l_max[0] | round(3) }}</td>
                 </tr>
                 </tbody>
 
@@ -81,8 +86,8 @@
 
         </div>
 
-        <p>Індекс узгодженості = {{ index_consistency[0] }}</p>
-        <p>Відношення узгодженості = {{ relation_consistency[0] }}%</p>
+        <p>Індекс узгодженості = {{ index_consistency[0] | round(3) }}</p>
+        <p>Відношення узгодженості = {{ relation_consistency[0] | round(3) }}%</p>
         <p><b>Висновок: {{ ranj[0] }}</b></p>
         <br>
 
@@ -115,8 +120,8 @@
                     {% for j in range(name_alternatives | length) %}
                     <td>{{ matrix_alt[num][i][j] }}</td>
                     {% endfor %}
-                    <td>{{ components_eigenvector_alt[num][i] }}</td>
-                    <td>{{ normalized_eigenvector_alt[num][i] }}</td>
+                    <td>{{ components_eigenvector_alt[num][i] | round(3) }}</td>
+                    <td>{{ normalized_eigenvector_alt[num][i] | round(3) }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -136,7 +141,7 @@
                 <tr>
                     <th class="table-secondary" style="width: 30%">Сума по стовпцях</th>
                     {% for i in range(num_alternatives) %}
-                    <td style="width: 15%">{{ sum_col_alt[num][i] }}</td>
+                    <td style="width: 15%">{{ sum_col_alt[num][i] | round(3) }}</td>
                     {% endfor %}
                     <th class="table-secondary">Разом (Lmax)</th>
                 </tr>
@@ -144,17 +149,17 @@
                     <th class="table-secondary">Добуток додатку по стовпцях і нормалізованої оцінки вектора пріоритету
                     </th>
                     {% for i in range(num_alternatives) %}
-                    <td>{{ prod_col_alt[num][i] }}</td>
+                    <td>{{ prod_col_alt[num][i] | round(3) }}</td>
                     {% endfor %}
-                    <td>{{ l_max_alt[num][0] }}</td>
+                    <td>{{ l_max_alt[num][0] | round(3) }}</td>
                 </tr>
                 </tbody>
 
             </table>
         </div>
 
-        <p>Індекс узгодженості = {{ index_consistency_alt[num][0] }}</p>
-        <p>Відношення узгодженості = {{ relation_consistency_alt[num][0] }}%</p>
+        <p>Індекс узгодженості = {{ index_consistency_alt[num][0] | round(3) }}</p>
+        <p>Відношення узгодженості = {{ relation_consistency_alt[num][0] | round(3) }}%</p>
         <p><b>Висновок по критерію "{{ name_criteria[num] }}": {{ ranj_alt[num][0] }}</b></p>
         <br>
         {% endfor %}
@@ -189,7 +194,7 @@
 
             <tr>
                 {% for i in range(num_criteria) %}
-                <td>{{ normalized_eigenvector[i] }}</td>
+                <td>{{ normalized_eigenvector[i] | round(3) }}</td>
                 {% endfor %}
             </tr>
             </thead>
@@ -199,11 +204,15 @@
             <tr>
                 <th>{{ name_alternatives[i] }}</th>
                 {% for j in range(normalized_eigenvector_alt | length) %}
-                <td>{{ normalized_eigenvector_alt[j][i] }}</td>
+                <td>{{ normalized_eigenvector_alt[j][i] | round(3) }}</td>
                 {% endfor %}
-                <td>{{ global_prior[i] }}</td>
+                <td>{{ global_prior[i] | round(3) }}</td>
             </tr>
             {% endfor %}
+             <tr>
+                    <th class="mpp_sum" colspan="{{ num_criteria+1 }}">Сума</th>
+                    <td>{{ global_prior | sum | round | int  }}</td>
+                </tr>
             </tbody>
         </table>
     </div>

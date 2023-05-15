@@ -121,13 +121,6 @@ def matrix_alt():
         'ranj': ranj,
     }
 
-    # Перевірка відношення узгодженості
-    for i in range(len(relation_consistency)):
-        if relation_consistency[i] > 15:
-            error = f'Перегляньте свої судження у матриці Критерію {name_criteria[i]}'
-            context['error'] = error
-            break
-
     return render_template('matrix_alt.html', **context)
 
 
@@ -228,9 +221,16 @@ def result():
 
     # Перевірка відношення узгодженості
     for c in range(num_criteria):
-        if relation_consistency_alt[c][0] > 15:
+        if relation_consistency_alt[c][0] > 10:
             error = f'Перегляньте свої судження у матриці Критерію "{name_criteria[c]}"'
             context['error'] = error
+            break
+
+    for i in range(len(relation_consistency)):
+        if relation_consistency[i] > 10:
+            error = f'Перегляньте свої судження у матриці для критеріїв'
+            context['error'] = error
+            break
 
     return render_template('result.html', **context)
 

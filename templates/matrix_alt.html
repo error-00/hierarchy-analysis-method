@@ -42,14 +42,8 @@
                     {% for j in range(name_alternatives | length) %}
                     <td>
                         {% if i < j %}
-                        {% if error %}
-                        <input class="form-control" type="text" name="matrix_alt"
-                               id="matrix_alt{ i }}_{{ j }}" value="{{ matrix_alt[num][i][j] }}"
-                               required pattern="^[1-9]$|^(1\/[2-9])$">
-                        {% else %}
                         <input class="form-control" type="text" name="matrix_alt"
                                id="matrix_alt_{{ i }}_{{ j }}_" required pattern="^[1-9]$|^(1\/[2-9])$">
-                        {% endif %}
                         {% elif i > j %}
                         <input class="form-control" type="text" name="matrix_alt"
                                id="matrix_alt{{ j }}_{{ i }}" value="" readonly>
